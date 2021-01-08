@@ -139,7 +139,7 @@ namespace CoreCodeCamp.Controllers
 
             }
         }
-        [HttpPut("{moniker}")]
+        [HttpDelete("{moniker}")]
         public async Task<ActionResult> Delete(string moniker)
         {
             try
