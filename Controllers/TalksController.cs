@@ -50,7 +50,7 @@ namespace CoreCodeCamp.Controllers
         {
             try
             {
-                var talk = campRepository.GetTalkByMonikerAsync(moniker, id);
+                var talk = await campRepository.GetTalkByMonikerAsync(moniker, id);
                 if (!talk.Equals(null))
                 {
                     return Ok(mapper.Map<TalkModel>(talk));
