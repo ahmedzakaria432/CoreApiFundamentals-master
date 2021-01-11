@@ -15,35 +15,37 @@ using System.Threading.Tasks;
 
 namespace CoreCodeCamp.Controllers
 {
+
+    //////////////////////////////////////////////////////////////
+    ///     this is to read version from url                //////
+    ///      [Route("api/V{version:apiVersion}/[controller]")]  //
+    //////////////////////////////////////////////////////////////   
     [ApiController]
-    [Route("api/Camps")]
-    [ApiVersion("2.0")]
-  
-    public class Camps2Controller : ControllerBase
+    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [ApiVersion("1.1")]
+    public class CampsController : ControllerBase
     {
         private readonly ICampRepository campRepository;
         private readonly IMapper mapper;
         private readonly LinkGenerator linkGenerator;
 
-        public Camps2Controller(ICampRepository campRepository, IMapper mapper, LinkGenerator linkGenerator)
+        public CampsController(ICampRepository campRepository, IMapper mapper, LinkGenerator linkGenerator)
         {
             this.campRepository = campRepository;
             this.mapper = mapper;
             this.linkGenerator = linkGenerator;
         }
         [HttpGet]
-        public async Task<IActionResult> Get(bool IncludeTalks = false)
+        [MapToApiVersion("1.0")]
+        public async Task<ActionResult<List<CampModel>>> Get(bool IncludeTalks = false)
         {
             try
             {
                 var camps = await campRepository.GetAllCampsAsync(IncludeTalks);
 
-                var ret = mapper.Map<List<CampModel>>(camps);
-                return Ok( new {
-                    count=ret.Count,
-                result=ret
-                
-                } );
+
+                return mapper.Map<List<CampModel>>(camps);
             }
             catch (Exception)
             {
@@ -52,6 +54,7 @@ namespace CoreCodeCamp.Controllers
 
         }
 
+        [MapToApiVersion("1.1")]
         public async Task<ActionResult<List<CampModel>>> Get11()
         {
             try
